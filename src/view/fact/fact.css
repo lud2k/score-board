@@ -1,0 +1,22 @@
+
+:local(.fact) {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.16667em;
+  padding: 20px;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+:local(.fact) > b {
+  font-weight: 500;
+  font-size: 1.3125rem;
+}
+
+:local(.fact) > svg {
+  margin-right: 4px;
+  vertical-align: text-bottom;
+}
+
+:local(.paper) {
+  height: 100%;
+}
