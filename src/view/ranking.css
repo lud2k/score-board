@@ -1,5 +1,6 @@
 
 :local(.ranking) {
-    height: 398px;
-    overflow: hidden;
+    height: 394px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
