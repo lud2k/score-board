@@ -73,3 +73,25 @@
 :local(.calendar-wrapper) .calendar-day[data-activity='5'] {
   background: rgb(26,152,80);
 }
+
+:local(.tooltip) {
+  pointer-events: none;
+}
+
+:local(.tooltip) [role="document"] {
+  box-shadow: 0px 1px 7px -1px black;
+}
+
+:local(.tooltipContent) td {
+  padding: 6px 15px;
+  border-bottom: 1px dashed #ccc;
+}
+
+:local(.tooltipContent) tr:last-child td {
+  border-bottom: 0;
+}
+
+:local(.tooltipContent) td:nth-child(2),
+:local(.tooltipContent) td:nth-child(3){
+  border-right: 1px dashed #ccc;
+}

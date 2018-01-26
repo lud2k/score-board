@@ -1,14 +1,35 @@
 
 import * as React from 'react'
-import {Stats} from '../model/models'
+import {Id, Score, Stats} from '../model/models'
 import * as _ from 'lodash'
 import {Data} from '../model/data'
 import * as moment from 'moment'
 import { Moment } from 'moment'
+import Popover from 'material-ui/Popover'
+import Chip from 'material-ui/Chip'
 
 const styles = require('./calendar.css')
 
-export class Calendar extends React.Component<{ data: Data, stats: Stats }, {}> {
+export class Calendar extends React.Component<{ data: Data, stats: Stats },
+    { overElement: EventTarget, overScores: Score[] }> {
+
+  constructor(props: any) {
+    super(props)
+
+    this.state = {
+      overElement: null,
+      overScores: null
+    }
+  }
+
+  onMouseOver(scores: Score[], event: any) {
+    this.setState({ overElement: event.target, overScores: scores })
+  }
+
+  onMouseOut() {
+    this.setState({ overElement: null, overScores: null })
+  }
+
   getDates(): Array<Array<Moment>> {
     let date = moment().date(28).day(7).subtract(7*5*5, 'days')
     const datesArray: Array<Array<Moment>> = []
@@ -29,10 +50,14 @@ export class Calendar extends React.Component<{ data: Data, stats: Stats }, {}> 
       const day = date.day()
       const dayType = (day === 0 || day === 6) ? 'week-end' : 'week-day'
       const dateString = date.format('YYYY-MM-DD')
-      const count = _.filter(this.props.data.scores, (score) => score.date === dateString).length
-      const activity = Math.min(5, count)
+      const scores = _.filter(this.props.data.scores, (score) => score.date === dateString)
+      const activity = Math.min(5, scores.length)
       return (
-        <div className={`calendar-day ${dayType}`} data-activity={activity} key={index} />
+        <div className={`calendar-day ${dayType}`}
+             data-activity={activity}
+             key={index}
+             onMouseOut={this.onMouseOut.bind(this)}
+             onMouseOver={this.onMouseOver.bind(this, scores)}/>
       )
     })
   }
@@ -55,6 +80,38 @@ export class Calendar extends React.Component<{ data: Data, stats: Stats }, {}> 
     ))
   }
 
+  renderPopoverContent() {
+    if (_.isEmpty(this.state.overScores)) {
+      return null
+    }
+
+    const games: any = {}
+    this.state.overScores.forEach(score => {
+      const key = [score.playerId1, score.playerId2].sort().join('_')
+      const winnerId = score.score1 > score.score2 ? score.playerId1 : score.playerId2
+      if (!games[key]) {
+        games[key] = {
+          players: [score.playerId1, score.playerId2],
+          [score.playerId1]: 0,
+          [score.playerId2]: 0,
+        }
+      }
+      games[key][winnerId]++
+    })
+    return _.values(games).map((game) => {
+      const players = this.props.data.players
+      return (
+        <tr>
+          <td>{players[game.players[0]].name}</td>
+          <td>{game[game.players[0]]}</td>
+          <td>vs</td>
+          <td>{players[game.players[1]].name}</td>
+          <td>{game[game.players[1]]}</td>
+        </tr>
+      )
+    })
+  }
+
   render() {
     const {data, stats} = this.props
     const datesArray = this.getDates()
@@ -64,6 +121,24 @@ export class Calendar extends React.Component<{ data: Data, stats: Stats }, {}> 
         <div className='calendar'>
           {this.renderRows(datesArray)}
         </div>
+        <Popover
+          title='Name here'
+          className={styles.tooltip}
+          anchorOrigin={{
+            vertical: -10,
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          elevation={0}
+          anchorEl={this.state.overElement}
+          open={!!this.state.overElement && !_.isEmpty(this.state.overScores)}>
+          <table className={styles.tooltipContent}>
+            {this.renderPopoverContent()}
+          </table>
+        </Popover>
       </div>
     )
   }
