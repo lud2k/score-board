@@ -1,0 +1,24 @@
+
+:local(.score-stats) {
+    height: 394px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+:local(.last-column) {
+    padding: 4px !important;
+    width: 50px !important;
+}
+
+:local(.player-column) {
+}
+
+:local(.score-stats) table tbody td {
+    font-size: 1rem;
+}
+
+:local(.tooltip) {
+    max-width: 200px;
+    line-height: 16px !important;
+    padding: 6px 3px;
+}

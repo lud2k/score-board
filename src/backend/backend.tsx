@@ -2,12 +2,16 @@
 import * as React from 'react'
 import {AppConfig} from '../config'
 import * as GoogleSheetsPublished from './google-sheets-published'
+import * as RestApi from './google-sheets-published'
 import {Data} from '../model/data'
 
 export const getData = (config: AppConfig): Promise<Data> => {
   const backendType = config.backend.type
   if (backendType === 'google-sheets-published') {
     return GoogleSheetsPublished.getData(config)
+  }
+  if (backendType === 'rest-api') {
+    return RestApi.getData(config)
   }
   throw new Error(`Unsupported backend type: ${backendType}`)
 }
@@ -22,6 +26,9 @@ export class AddEntry extends React.Component<{config: AppConfig, data: Data}, {
     const backendType = config.backend.type
     if (backendType === 'google-sheets-published') {
       return <GoogleSheetsPublished.AddEntry config={config}/>
+    }
+    if (backendType === 'rest-api') {
+      return <RestApi.AddEntry config={config}/>
     }
     throw new Error(`Unsupported backend type: ${backendType}`)
   }

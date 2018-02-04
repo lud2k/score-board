@@ -1,0 +1,11 @@
+
+:local(.title-icon) {
+  margin-right: 2px;
+  vertical-align: text-bottom;
+}
+
+:local(.content) {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 20px;
+}

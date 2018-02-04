@@ -6,7 +6,7 @@ declare module 'jdenticon/dist/jdenticon.min.js' {
 declare module 'glicko2' {
   export class Glicko2 {
     constructor(options: any)
-    makePlayer(): void
+    makePlayer(rating?: number, rd?: number, vol?: number): void
     getPlayers(): any[]
     updateRatings(scores: any[]): void
   }
@@ -19,7 +19,7 @@ declare module 'blueimp-md5' {
 }
 
 declare module 'randomcolor' {
-  function randomcolor(config: { count: number, seed: number }): string[]
+  function randomcolor(config: { luminosity: string, count: number, seed: number }): string[]
   namespace randomcolor {}
   export = randomcolor
 }

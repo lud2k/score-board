@@ -21,6 +21,8 @@ export const computeRankings = (data: Data): {rankingsByDate: PlayerRankingsByDa
   })
 
   const rankings = {}
+  let minRating = Number.MAX_VALUE
+  let maxRating = 0
   dates.forEach((date) => {
     const scores = scoresByDate[date].map((score) => [
       players[score.playerId1],
@@ -40,8 +42,10 @@ export const computeRankings = (data: Data): {rankingsByDate: PlayerRankingsByDa
 
     // Sort and add rank and normalizedRating
     rankings[date] = _.sortBy<PlayerRanking>(rankings[date], 'rating')
-    const minRating = _.first<PlayerRanking>(rankings[date]).rating
-    const maxRating = _.last<PlayerRanking>(rankings[date]).rating
+    minRating = Math.min(minRating, _.first<PlayerRanking>(rankings[date]).rating)
+    maxRating = Math.max(maxRating, _.last<PlayerRanking>(rankings[date]).rating)
+  })
+  dates.forEach((date) => {
     rankings[date].forEach((playerRanking: PlayerRanking, index: number) => {
       playerRanking.rank = index
       playerRanking.normalizedRating = (playerRanking.rating-minRating)/(maxRating-minRating)

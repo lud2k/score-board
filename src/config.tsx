@@ -24,6 +24,7 @@ export type BackendConfig = {
 
 export interface AppConfig {
   backend: BackendConfig
+  title?: string
 }
 
 const loadConfig = (configUrl?: string): Promise<AppConfig> => {
@@ -33,7 +34,14 @@ const loadConfig = (configUrl?: string): Promise<AppConfig> => {
     })
 }
 
-export const getConfig = (): Promise<AppConfig> => {
+export const setDefaults = (config: AppConfig): AppConfig => {
+  if (!config.title) {
+    config.title = 'Game Stats'
+  }
+  return config
+}
+
+export const resolveConfig = (): Promise<AppConfig> => {
   // Try to get the config from the window object
   if (window.config) {
     return Promise.resolve(window.config)
@@ -57,4 +65,9 @@ export const getConfig = (): Promise<AppConfig> => {
 
   // Try to get the config using AJAX
   return loadConfig(queryParams.get('configUrl'))
+}
+
+export const getConfig = (): Promise<AppConfig> => {
+  return resolveConfig()
+    .then(setDefaults)
 }

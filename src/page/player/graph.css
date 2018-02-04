@@ -1,0 +1,4 @@
+
+:local(.tooltip) {
+    pointer-events: none;
+}

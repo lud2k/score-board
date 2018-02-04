@@ -1,4 +1,4 @@
-import {GamesMap, Id, PlayersMap, ScoresMap, Stats} from './models'
+import {Game, GamesMap, Id, Player, PlayersMap, ScoresMap, Stats} from './models'
 import * as _ from 'lodash'
 import {memoize} from 'decko'
 import {computeStats} from '../core/stats'
@@ -29,8 +29,12 @@ export class Data {
     )
   }
 
-  getGameById(id: Id) {
+  getGameById(id: Id): Game {
     return this.games[id]
+  }
+
+  getPlayerById(id: Id): Player {
+    return this.players[id]
   }
 
   getStats(): Stats {
