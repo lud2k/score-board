@@ -1,0 +1,2 @@
+
+export {getData} from './data'

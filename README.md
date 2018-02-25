@@ -17,7 +17,7 @@ Try it out: https://lud2k.github.io/score-board/public/index.html
 
 ## QuickStart with Google Sheets
 
-The easiest (and currently only) backend to setup is Google Sheets.
+The easiest backend to setup is Google Sheets.
 
 1. **Make a copy of the following Google Sheet**<br />
 In Google Sheets, click "File" > "Make a Copy".
@@ -97,6 +97,34 @@ config.backend.type=google-sheets-published
 &config.backend.publishedId={publishedId}
 &config.backend.sheetId={sheetId}
 ```
+
+### Backend: Rest API
+
+This is the backend used by by [Score Board Server](https://github.com/lud2k/score-board-server).
+A basic implementation of a Rest API backend.
+
+```json
+{
+  "backend": {
+    "type": "rest-api",
+    "url": "http://yout.host.com/",
+    "dataUrl": "optional url where a user can see the full data"
+  }
+}
+```
+
+### Backend: Random
+
+This backend is just here for demo. This just generates random scores.
+
+```json
+{
+  "backend": {
+    "type": "random"
+  }
+}
+```
+
 
 ## Host it yourself
 

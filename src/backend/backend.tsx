@@ -3,6 +3,7 @@ import * as React from 'react'
 import {AppConfig} from '../config'
 import * as GoogleSheetsPublished from './google-sheets-published'
 import * as RestApi from './rest-api'
+import * as Random from './random'
 import {Data, Player} from '../model/models'
 import * as randomColor from 'randomcolor'
 import _ = require('lodash')
@@ -14,6 +15,8 @@ export const getData = (config: AppConfig): Promise<Data> => {
     promise = GoogleSheetsPublished.getData(config)
   } else if (backendType === 'rest-api') {
     promise = RestApi.getData(config)
+  } else if (backendType === 'random') {
+    promise = Random.getData(config)
   } else {
     throw new Error(`Unsupported backend type: ${backendType}`)
   }
@@ -52,6 +55,8 @@ export class AddEntry extends React.Component<{config: AppConfig, data: Data}, {
         <RestApi.AddPlayer config={config} data={data}  />,
         <RestApi.SeeData config={config} />,
       ]
+    } else if (backendType === 'random') {
+      return []
     } else {
       throw new Error(`Unsupported backend type: ${backendType}`)
     }

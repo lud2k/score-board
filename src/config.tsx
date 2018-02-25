@@ -1,7 +1,7 @@
 
 import * as _ from 'lodash'
 
-export type BackendType = 'google-sheets-published' | 'rest-api'
+export type BackendType = 'google-sheets-published' | 'rest-api' | 'random'
 
 declare global {
   interface Window {
