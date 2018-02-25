@@ -1,5 +1,5 @@
 {
-  "name": "game-stats",
+  "name": "score-board",
   "version": "1.0.0",
   "description": "A dashboard showing game stats",
   "dependencies": {
@@ -50,6 +50,6 @@
     "watch": "webpack --config=webpack.config.js --watch",
     "dev": "webpack-dev-server --content-base public"
   },
-  "author": "",
+  "author": "Ludovic Cabre",
   "license": "ISC"
 }
