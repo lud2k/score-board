@@ -7,9 +7,8 @@ import Toolbar from 'material-ui/Toolbar'
 import Grid from 'material-ui/Grid'
 import {PlayerGraph} from './player-graph'
 import {Ranking} from './ranking'
-import {Id} from '../../model/models'
+import {Data, Id} from '../../model/models'
 import {RankingsOverTime} from './rankings-over-time'
-import {Data} from '../../model/data'
 import {Calendar} from './calendar'
 import {Facts} from './facts'
 import EventIcon from 'material-ui-icons/Event'
@@ -20,21 +19,23 @@ import {AppBarActions} from './app-bar-actions'
 import {AppConfig} from '../../config'
 import {MenuIconPopover} from '../common/menu-icon-popover'
 import {Title} from '../common/title'
+import {filterByGameId} from '../../core/filter-data'
+import {computeStats} from '../../core/stats'
 
 const styles = require('./game.css')
 
 export class Game extends React.Component<{ data: Data, config: AppConfig, gameId: Id }, {}> {
   render() {
     const {data, gameId, config} = this.props
-    const gameData = data.filterForGame(gameId)
-    const gameStats = gameData.getStats()
+    const gameData = filterByGameId(gameId, data)
+    const gameStats = computeStats(gameData)
     return (
       <div>
         <AppBar position='static'>
           <Toolbar>
             <MenuIconPopover data={data} />
             <Title config={config} section='Game' subSection={data.games[gameId].name} />
-            <AppBarActions data={gameData} config={config} />
+            <AppBarActions data={data} config={config} />
           </Toolbar>
         </AppBar>
         <div className={styles.content}>

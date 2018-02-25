@@ -1,0 +1,8 @@
+
+:local(.dialog) {
+    min-width: 500px;
+}
+
+:local(.progress) {
+    margin-right: 10px;
+}

@@ -1,8 +1,7 @@
 
 import * as glicko2 from 'glicko2'
-import {PlayerRankingsByDate, PlayerRanking} from '../model/models'
+import {PlayerRankingsByDate, PlayerRanking, Data} from '../model/models'
 import * as _ from 'lodash'
-import {Data} from '../model/data'
 
 export const computeRankings = (data: Data): {rankingsByDate: PlayerRankingsByDate,
   rankings: PlayerRanking[]} => {

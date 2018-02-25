@@ -1,7 +1,6 @@
 
 import * as React from 'react'
-import {Stats} from '../../model/models'
-import {Data} from '../../model/data'
+import {Data, Stats} from '../../model/models'
 import * as _ from 'lodash'
 import {BestPlayerFact} from './fact/best-player-fact'
 import {SecondPlayerFact} from './fact/second-player-fact'

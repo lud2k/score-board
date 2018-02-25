@@ -1,10 +1,9 @@
 
 import * as React from 'react'
 import Table, { TableHead, TableRow, TableCell, TableBody } from 'material-ui/Table'
-import {Id, Score} from '../../model/models'
+import {Data, Id, Score} from '../../model/models'
 import Tooltip from 'material-ui/Tooltip'
 import * as _ from 'lodash'
-import {Data} from '../../model/data'
 import {Link} from 'react-router-dom'
 
 const styles = require('./score-stats.css')
@@ -77,7 +76,7 @@ export class ScoreStats extends React.Component<{ data: Data, playerId: Id }, {}
         return res
       }, {})
     const scoresPerPlayerList = _.sortBy(_.map(scoresPerPlayer, (scores: Score[], otherPlayerId: Id) => ({
-      scores,
+      scores: _.sortBy(scores, 'date').reverse(),
       playerId: otherPlayerId,
     })), (item) => -item.scores.length)
 

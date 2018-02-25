@@ -1,11 +1,9 @@
 
 import * as React from 'react'
-import {Player, Stats} from '../../../model/models'
-import {Data} from '../../../model/data'
+import {Data, Player, Stats} from '../../../model/models'
 import {Fact} from './fact'
 import TrendingDownIcon from 'material-ui-icons/TrendingDown'
 import * as _ from 'lodash'
-import * as moment from 'moment'
 import {Link} from 'react-router-dom'
 
 export class TrendDownFact extends React.Component<{ data: Data, stats: Stats }, {}> {

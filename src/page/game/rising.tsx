@@ -1,11 +1,10 @@
 
 import * as React from 'react'
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
-import {PlayerRanking, Score, Stats} from '../../model/models'
+import {Data, PlayerRanking, Score, Stats} from '../../model/models'
 import StarIcon from 'material-ui-icons/Star'
 import StarBorderIcon from 'material-ui-icons/StarBorder'
 import StarHalfIcon from 'material-ui-icons/StarHalf'
-import {Data} from '../../model/data'
 
 interface Leader {
   name: string

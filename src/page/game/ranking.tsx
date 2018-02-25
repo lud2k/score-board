@@ -1,9 +1,8 @@
 
 import * as React from 'react'
 import Table, { TableHead, TableRow, TableCell, TableBody } from 'material-ui/Table'
-import {PlayerRanking, Stats} from '../../model/models'
+import {Data, PlayerRanking, Stats} from '../../model/models'
 import * as _ from 'lodash'
-import {Data} from '../../model/data'
 import {Link} from 'react-router-dom'
 
 const styles = require('./ranking.css')

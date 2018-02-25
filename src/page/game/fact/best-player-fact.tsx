@@ -1,7 +1,6 @@
 
 import * as React from 'react'
-import {Id, Player, Stats} from '../../../model/models'
-import {Data} from '../../../model/data'
+import {Data, Player, Stats} from '../../../model/models'
 import {Fact} from './fact'
 import WhatshotIcon from 'material-ui-icons/Whatshot'
 import * as _ from 'lodash'

@@ -3,11 +3,9 @@ import * as React from 'react'
 import Popover from 'material-ui/Popover'
 import Chip from 'material-ui/Chip'
 import * as d3 from 'd3'
-import {Id, Player, PlayerRanking, Stats} from '../../model/models'
+import {Data, Id, Player, PlayerRanking, Stats} from '../../model/models'
 import {SimulationNodeDatum} from 'd3-force'
 import * as _ from 'lodash'
-import {Data} from '../../model/data'
-import {PlayerAvatar} from './player-avatar'
 
 const styles = require('./player-graph.css')
 

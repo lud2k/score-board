@@ -2,7 +2,7 @@
 import * as React from 'react'
 import Table, { TableHead, TableRow, TableCell, TableBody } from 'material-ui/Table'
 import * as _ from 'lodash'
-import {Data} from '../../model/data'
+import {Data} from '../../model/models'
 
 export class RecentGamesBody extends React.Component<{ data: Data }, {}> {
   getLatestScores(data: Data) {

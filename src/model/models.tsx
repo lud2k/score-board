@@ -1,6 +1,12 @@
 
 export type Id = string
 
+export interface Data {
+  players: PlayersMap
+  scores: ScoresMap
+  games: GamesMap
+}
+
 export interface Game {
   id: Id
   name: string

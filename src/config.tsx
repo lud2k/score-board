@@ -1,7 +1,7 @@
 
 import * as _ from 'lodash'
 
-export type BackendType = 'google-sheets-published'
+export type BackendType = 'google-sheets-published' | 'rest-api'
 
 declare global {
   interface Window {
@@ -14,13 +14,14 @@ export interface GoogleSheetsPublishedConfig {
   sheetId: string
 }
 
-export interface GoogleSheetsApiConfig {
-  apiKey: string
+export interface RestApiConfig {
+  url: string,
+  dataUrl: string
 }
 
 export type BackendConfig = {
   type: BackendType,
-} & GoogleSheetsPublishedConfig & GoogleSheetsApiConfig
+} & GoogleSheetsPublishedConfig & RestApiConfig
 
 export interface AppConfig {
   backend: BackendConfig

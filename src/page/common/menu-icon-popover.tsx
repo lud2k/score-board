@@ -1,11 +1,10 @@
 
 import * as React from 'react'
-import {Data} from '../../model/data'
 import IconButton from 'material-ui/IconButton'
 import MenuIcon from 'material-ui-icons/Menu'
 import Popover from 'material-ui/Popover'
 import {MouseEvent} from 'react'
-import {Game, Score} from '../../model/models'
+import {Data, Game, Score} from '../../model/models'
 import List, { ListItem, ListItemText, ListSubheader } from 'material-ui/List'
 import _ = require('lodash')
 

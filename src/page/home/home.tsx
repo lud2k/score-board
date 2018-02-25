@@ -1,6 +1,5 @@
 
 import * as React from 'react'
-import {Data} from '../../model/data'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
@@ -14,6 +13,7 @@ import {AppConfig} from '../../config'
 import {GameCard} from './game-card'
 import _ = require('lodash')
 import {MenuIconPopover} from '../common/menu-icon-popover'
+import {Data} from '../../model/models'
 
 const styles = require('./home.css')
 

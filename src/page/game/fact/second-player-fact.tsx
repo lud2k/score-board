@@ -1,10 +1,7 @@
 
 import * as React from 'react'
-import TrendingUpIcon from 'material-ui-icons/TrendingUp'
-import {Id, Player, Stats} from '../../../model/models'
-import {Data} from '../../../model/data'
+import {Data, Player, Stats} from '../../../model/models'
 import {Fact} from './fact'
-import TrendingDownIcon from 'material-ui-icons/TrendingDown'
 import StarIcon from 'material-ui-icons/Star'
 import * as _ from 'lodash'
 import * as moment from 'moment'

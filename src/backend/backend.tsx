@@ -2,18 +2,38 @@
 import * as React from 'react'
 import {AppConfig} from '../config'
 import * as GoogleSheetsPublished from './google-sheets-published'
-import * as RestApi from './google-sheets-published'
-import {Data} from '../model/data'
+import * as RestApi from './rest-api'
+import {Data, Player} from '../model/models'
+import * as randomColor from "randomcolor"
+import _ = require('lodash')
 
 export const getData = (config: AppConfig): Promise<Data> => {
   const backendType = config.backend.type
+  let promise
   if (backendType === 'google-sheets-published') {
-    return GoogleSheetsPublished.getData(config)
+    promise = GoogleSheetsPublished.getData(config)
+  } else if (backendType === 'rest-api') {
+    promise = RestApi.getData(config)
+  } else {
+    throw new Error(`Unsupported backend type: ${backendType}`)
   }
-  if (backendType === 'rest-api') {
-    return RestApi.getData(config)
-  }
-  throw new Error(`Unsupported backend type: ${backendType}`)
+
+  return promise.then(data => {
+    // generate random colors for players
+    const colors = randomColor({
+      luminosity: 'dark',
+      count: _.size(data.players),
+      seed: 15158731,
+    })
+    let index = 0
+    _.forEach(data.players, (player: Player) => {
+      if (!player.color) {
+        player.color = colors[index++]
+      }
+    })
+
+    return data
+  })
 }
 
 export class AddEntry extends React.Component<{config: AppConfig, data: Data}, {}> {
@@ -25,11 +45,15 @@ export class AddEntry extends React.Component<{config: AppConfig, data: Data}, {
 
     const backendType = config.backend.type
     if (backendType === 'google-sheets-published') {
-      return <GoogleSheetsPublished.AddEntry config={config}/>
+      return <GoogleSheetsPublished.AddEntry config={config} />
+    } else if (backendType === 'rest-api') {
+      return [
+        <RestApi.AddScore config={config} data={data} />,
+        <RestApi.AddPlayer config={config} data={data}  />,
+        <RestApi.SeeData config={config} />,
+      ]
+    } else {
+      throw new Error(`Unsupported backend type: ${backendType}`)
     }
-    if (backendType === 'rest-api') {
-      return <RestApi.AddEntry config={config}/>
-    }
-    throw new Error(`Unsupported backend type: ${backendType}`)
   }
 }

@@ -1,11 +1,11 @@
 
 import * as React from 'react'
-import {Data} from '../../model/data'
 import {MenuIconPopover} from '../common/menu-icon-popover'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import {Title} from '../common/title'
 import {AppConfig} from '../../config'
+import {Data} from '../../model/models'
 
 const styles = require('./not-found.css')
 

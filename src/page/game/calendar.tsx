@@ -1,8 +1,7 @@
 
 import * as React from 'react'
-import {Score, Stats} from '../../model/models'
+import {Data, Score, Stats} from '../../model/models'
 import * as _ from 'lodash'
-import {Data} from '../../model/data'
 import * as moment from 'moment'
 import { Moment } from 'moment'
 import Popover from 'material-ui/Popover'

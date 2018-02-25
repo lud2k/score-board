@@ -1,0 +1,32 @@
+
+:local(.dialog) {
+    min-width: 500px;
+}
+
+:local(.group) {
+    display: flex;
+}
+
+:local(.group) > * {
+    flex: 1;
+}
+
+:local(.group) > legend {
+    margin: 20px 0 10px 0;
+}
+
+:local(.group) > *:first-child {
+    margin-right: 10px;
+}
+
+:local(.group) > *:last-child {
+    margin-left: 10px;
+}
+
+:local(.progress) {
+    margin-right: 10px;
+}
+
+:local(.date-field) {
+    margin-bottom: 10px !important;
+}

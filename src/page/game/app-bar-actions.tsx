@@ -1,8 +1,8 @@
 
 import * as React from 'react'
-import {Data} from '../../model/data'
 import {AppConfig} from '../../config'
 import {AddEntry} from '../../backend/backend'
+import {Data} from '../../model/models'
 
 const {appBarActions} = require('./app-bar-actions.css')
 

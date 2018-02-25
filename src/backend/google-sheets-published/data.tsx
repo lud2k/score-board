@@ -1,10 +1,8 @@
 
 import {AppConfig} from '../../config'
-import {Game, GamesMap, ScoresMap, PlayersMap} from '../../model/models'
+import {Game, GamesMap, ScoresMap, PlayersMap, Data} from '../../model/models'
 import * as PapaParse from 'papaparse'
 import * as _ from 'lodash'
-import {Data} from '../../model/data'
-import * as randomColor from 'randomcolor'
 
 const PUBLIC_SHEET_URL = (id: string) =>
   `https://docs.google.com/spreadsheets/d/e/${id}/pub?gid=0&single=true&output=csv`
@@ -27,14 +25,8 @@ const parsePlayers = (rows: CsvRow[]): PlayersMap => {
     namesMap[row['Name 2']] = true
   })
 
-  const colors = randomColor({
-    luminosity: 'dark',
-    count: _.keys(namesMap).length,
-    seed: 15158731,
-  })
-
   const players = _.keys(namesMap).map((name, index) => ({
-    color: colors[index],
+    color: null,
     id: index.toString(),
     name,
   }))
@@ -77,7 +69,7 @@ export const getData = (config: AppConfig): Promise<Data> => {
           const players = parsePlayers(data)
           const games = parseGames(data)
           const scores = parseScores(games, players, data)
-          return new Data(players, games, scores)
+          return {players, games, scores}
         })
       })
   }
