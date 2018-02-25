@@ -73871,7 +73871,7 @@ class AddScore extends React.Component {
         this.onClickAdd = () => {
             this.setState({
                 open: true,
-                scores: [{ score1: '0', score2: '0' }],
+                scores: [{ score1: '', score2: '' }],
                 date: moment().format('YYYY-MM-DD'),
             });
         };
@@ -73882,8 +73882,13 @@ class AddScore extends React.Component {
             // show loading
             this.setState({ loading: true });
             // do ajax request
-            const scores = this.state.scores.map((score) => {
-                return fetch(`${this.props.config.backend.url}/scores`, {
+            const scores = this.state.scores
+                .filter((score) => {
+                // only keep scores that are valid
+                return score.score1 && score.score2 && !(score.score1 === '0' && score.score2 === '0');
+            })
+                .map((score) => {
+                return fetch(`${this.props.config.backend.url}/scoresx`, {
                     method: 'POST',
                     body: JSON.stringify({
                         date: this.state.date,
@@ -73924,19 +73929,17 @@ class AddScore extends React.Component {
         this.onChangeScore = (name, index) => (event) => {
             const scores = this.state.scores;
             if (!scores[index]) {
-                scores[index] = { score1: '0', score2: '0' };
+                scores[index] = { score1: '', score2: '' };
             }
             scores[index][name] = event.currentTarget.value + '';
             // is it not the last row and it is now empty?
-            if (scores.length - 1 !== index && (!scores[index].score1 || scores[index].score1 === '0') &&
-                (!scores[index].score2 || scores[index].score2 === '0')) {
+            if (scores.length - 1 !== index && !scores[index].score1 && !scores[index].score2) {
                 scores.splice(index, 1);
             }
             // is it the last row and it is completely filled?
             const score = scores[index];
-            if (scores.length - 1 === index && score.score1 !== '0' && score.score2 !== '0' &&
-                score.score1 && score.score2) {
-                scores[index + 1] = { score1: '0', score2: '0' };
+            if (scores.length - 1 === index && score.score1 && score.score2) {
+                scores[index + 1] = { score1: '', score2: '' };
             }
             this.setState({ scores });
         };
@@ -73955,7 +73958,7 @@ class AddScore extends React.Component {
             gameId: gameId || '',
             playerId1: playerId1 || '',
             playerId2: playerId2 || '',
-            scores: [{ score1: '0', score2: '0' }],
+            scores: [{ score1: '', score2: '' }],
         };
     }
     isScoresFilled() {
@@ -73963,8 +73966,7 @@ class AddScore extends React.Component {
         const scores = this.state.scores;
         scores.forEach((score, index) => {
             if (index === 0 || index < scores.length - 1) {
-                allFilled = allFilled && score.score1 && score.score2 &&
-                    (score.score1 !== '0' || score.score2 !== '0');
+                allFilled = allFilled && !!score.score1 && !!score.score2;
             }
         });
         return allFilled;

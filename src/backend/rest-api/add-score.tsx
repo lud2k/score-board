@@ -36,7 +36,7 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
       gameId: gameId || '',
       playerId1: playerId1 || '',
       playerId2: playerId2 || '',
-      scores: [{score1: '0', score2: '0'}],
+      scores: [{score1: '', score2: ''}],
     }
   }
 
@@ -45,8 +45,7 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
     const scores = this.state.scores
     scores.forEach((score, index) => {
       if (index === 0 || index < scores.length-1) {
-        allFilled = allFilled && score.score1 && score.score2 &&
-          (score.score1 !== '0' || score.score2 !== '0')
+        allFilled = allFilled && !!score.score1 && !!score.score2
       }
     })
     return allFilled
@@ -60,7 +59,7 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
   onClickAdd = () => {
     this.setState({
       open: true,
-      scores: [{score1: '0', score2: '0'}],
+      scores: [{score1: '', score2: ''}],
       date: moment().format('YYYY-MM-DD'),
     })
   }
@@ -74,30 +73,35 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
     this.setState({ loading: true })
 
     // do ajax request
-    const scores: Promise<void>[] = this.state.scores.map((score) => {
-      return fetch(`${this.props.config.backend.url}/scores`, {
-        method: 'POST',
-        body: JSON.stringify({
-          date: this.state.date,
-          gameId: this.state.gameId,
-          playerId1: this.state.playerId1,
-          playerId2: this.state.playerId2,
-          score1: parseInt(score.score1, 10),
-          score2: parseInt(score.score2, 10),
-        }),
-        headers: new Headers({
-          'Content-Type': 'application/json',
-        }),
-      }).then((response: any) => {
-        if (response.status !== 200) {
-          throw new Error('Invalid response: ' + response.statusText)
-        }
+    const scores: Promise<void>[] = this.state.scores
+      .filter((score) => {
+        // only keep scores that are valid
+        return score.score1 && score.score2 && !(score.score1 === '0' && score.score2 === '0')
+      })
+      .map((score) => {
+        return fetch(`${this.props.config.backend.url}/scoresx`, {
+          method: 'POST',
+          body: JSON.stringify({
+            date: this.state.date,
+            gameId: this.state.gameId,
+            playerId1: this.state.playerId1,
+            playerId2: this.state.playerId2,
+            score1: parseInt(score.score1, 10),
+            score2: parseInt(score.score2, 10),
+          }),
+          headers: new Headers({
+            'Content-Type': 'application/json',
+          }),
+        }).then((response: any) => {
+          if (response.status !== 200) {
+            throw new Error('Invalid response: ' + response.statusText)
+          }
 
-        return response.json().then((newScore: Score) => {
-          store.dispatch(addScore(newScore))
+          return response.json().then((newScore: Score) => {
+            store.dispatch(addScore(newScore))
+          })
         })
       })
-    })
     Promise.all(scores).then(() => {
       this.setState({ open: false, loading: false })
     }).catch(() => {
@@ -120,21 +124,19 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
   onChangeScore = (name: string, index: number) => (event: any) => {
     const scores: any = this.state.scores
     if (!scores[index]) {
-      scores[index] = { score1: '0', score2: '0' }
+      scores[index] = { score1: '', score2: '' }
     }
     scores[index][name] = event.currentTarget.value+''
 
     // is it not the last row and it is now empty?
-    if (scores.length-1 !== index && (!scores[index].score1 || scores[index].score1 === '0') &&
-      (!scores[index].score2 || scores[index].score2 === '0')) {
+    if (scores.length-1 !== index && !scores[index].score1 && !scores[index].score2) {
       scores.splice(index, 1)
     }
 
     // is it the last row and it is completely filled?
     const score = scores[index]
-    if (scores.length-1 === index && score.score1 !== '0' && score.score2 !== '0' &&
-      score.score1 && score.score2) {
-      scores[index+1] = { score1: '0', score2: '0' }
+    if (scores.length-1 === index && score.score1 && score.score2) {
+      scores[index+1] = { score1: '', score2: '' }
     }
 
     this.setState({ scores })
