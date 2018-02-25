@@ -1,6 +1,6 @@
 import {
   ADD_PLAYER, ADD_SCORE, AddPlayerAction, AddScoreAction, SET_CONFIG,
-  SET_DATA, SetConfigAction, SetDataAction
+  SET_DATA, SetConfigAction, SetDataAction,
 } from './actions'
 import {createStore, Store} from 'redux'
 import {AppConfig} from '../config'
@@ -18,13 +18,13 @@ export const reducer = (state: StoreState = {}, action: AddPlayerAction & AddSco
     case SET_CONFIG: {
       return {
         ...state,
-        config: action.config
+        config: action.config,
       }
     }
     case SET_DATA: {
       return {
         ...state,
-        data: action.data
+        data: action.data,
       }
     }
     case ADD_PLAYER: {
@@ -35,8 +35,8 @@ export const reducer = (state: StoreState = {}, action: AddPlayerAction & AddSco
           players: {
             ...state.data.players,
             [action.player.id]: action.player,
-          }
-        }
+          },
+        },
       }
     }
     case ADD_SCORE: {
@@ -47,8 +47,8 @@ export const reducer = (state: StoreState = {}, action: AddPlayerAction & AddSco
           scores: {
             ...state.data.scores,
             [action.score.id]: action.score,
-          }
-        }
+          },
+        },
       }
     }
     default:

@@ -27367,19 +27367,19 @@ exports.SET_DATA = 'SET_DATA';
 exports.SET_CONFIG = 'SET_CONFIG';
 exports.addPlayer = (player) => ({
     type: exports.ADD_PLAYER,
-    player
+    player,
 });
 exports.addScore = (score) => ({
     type: exports.ADD_SCORE,
-    score
+    score,
 });
 exports.setData = (data) => ({
     type: exports.SET_DATA,
-    data
+    data,
 });
 exports.setConfig = (config) => ({
     type: exports.SET_CONFIG,
-    config
+    config,
 });
 
 
@@ -35703,7 +35703,7 @@ exports.getData = (config) => {
     else {
         throw new Error(`Unsupported backend type: ${backendType}`);
     }
-    return promise.then(data => {
+    return promise.then((data) => {
         // generate random colors for players
         const colors = randomColor({
             luminosity: 'dark',
@@ -66598,9 +66598,12 @@ class AddPlayer extends React.Component {
                     name: this.state.name,
                 }),
                 headers: new Headers({
-                    'Content-Type': 'application/json'
-                })
+                    'Content-Type': 'application/json',
+                }),
             }).then((response) => {
+                if (response.status !== 200) {
+                    throw new Error('Invalid response: ' + response.statusText);
+                }
                 // parse and trigger redux action
                 return response.json().then((player) => {
                     this.setState({ loading: false, open: false });
@@ -66638,8 +66641,8 @@ class AddPlayer extends React.Component {
                 React.createElement(Dialog_1.DialogContent, null,
                     React.createElement(TextField_1.default, { label: 'Name', fullWidth: true, value: name, onChange: this.onChangeName })),
                 React.createElement(Dialog_1.DialogActions, null,
-                    React.createElement(Button_1.default, { onClick: this.onClose, color: "primary" }, "Cancel"),
-                    React.createElement(Button_1.default, { onClick: this.onClickAddPlayer, color: "primary", disabled: !this.isAllFilled() || loading },
+                    React.createElement(Button_1.default, { onClick: this.onClose, color: 'primary' }, "Cancel"),
+                    React.createElement(Button_1.default, { onClick: this.onClickAddPlayer, color: 'primary', disabled: !this.isAllFilled() || loading },
                         loading && React.createElement(Progress_1.CircularProgress, { size: 20, className: styles.progress }),
                         "Add")))));
     }
@@ -73869,7 +73872,7 @@ class AddScore extends React.Component {
             this.setState({
                 open: true,
                 scores: [{ score1: '0', score2: '0' }],
-                date: moment().format('YYYY-MM-DD')
+                date: moment().format('YYYY-MM-DD'),
             });
         };
         this.onClose = () => {
@@ -73887,15 +73890,18 @@ class AddScore extends React.Component {
                         gameId: this.state.gameId,
                         playerId1: this.state.playerId1,
                         playerId2: this.state.playerId2,
-                        score1: parseInt(score.score1),
-                        score2: parseInt(score.score2)
+                        score1: parseInt(score.score1, 10),
+                        score2: parseInt(score.score2, 10),
                     }),
                     headers: new Headers({
-                        'Content-Type': 'application/json'
-                    })
+                        'Content-Type': 'application/json',
+                    }),
                 }).then((response) => {
-                    return response.json().then((score) => {
-                        store_1.store.dispatch(actions_1.addScore(score));
+                    if (response.status !== 200) {
+                        throw new Error('Invalid response: ' + response.statusText);
+                    }
+                    return response.json().then((newScore) => {
+                        store_1.store.dispatch(actions_1.addScore(newScore));
                     });
                 });
             });
@@ -73912,7 +73918,6 @@ class AddScore extends React.Component {
             window.localStorage.setItem('gameId', gameId);
         };
         this.onChangeDate = (event) => {
-            console.log('event', event.currentTarget.value);
             const date = event.currentTarget.value + '';
             this.setState({ date });
         };
@@ -73983,19 +73988,19 @@ class AddScore extends React.Component {
             React.createElement(Dialog_1.default, { open: open, onClose: this.onClose, classes: { paper: styles.dialog } },
                 React.createElement(Dialog_1.DialogTitle, null, "Add Score"),
                 React.createElement(Dialog_1.DialogContent, null,
-                    React.createElement(TextField_1.default, { label: "Date", type: "date", value: date, onChange: this.onChangeDate, fullWidth: true, className: styles.dateField }),
+                    React.createElement(TextField_1.default, { label: 'Date', type: 'date', value: date, onChange: this.onChangeDate, fullWidth: true, className: styles.dateField }),
                     React.createElement(TextField_1.default, { select: true, label: 'Game', fullWidth: true, value: gameId, onChange: this.onChangeGame }, _.sortBy(_.values(this.props.data.games), 'name').map((game) => (React.createElement(MenuItem_1.default, { key: game.id, value: game.id }, game.name)))),
                     React.createElement("div", null,
                         React.createElement("div", { className: styles.group },
-                            React.createElement(Form_1.FormLabel, { component: "legend" }, "Player 1"),
-                            React.createElement(Form_1.FormLabel, { component: "legend" }, "Player 2")),
+                            React.createElement(Form_1.FormLabel, { component: 'legend' }, "Player 1"),
+                            React.createElement(Form_1.FormLabel, { component: 'legend' }, "Player 2")),
                         React.createElement("div", { className: styles.group },
                             React.createElement(player_select_field_1.PlayerSelectField, { players: this.props.data.players, value: playerId1, label: 'Name', onChange: this.onChangePlayer('playerId1') }),
                             React.createElement(player_select_field_1.PlayerSelectField, { players: this.props.data.players, value: playerId2, label: 'Name', onChange: this.onChangePlayer('playerId2') })),
                         this.renderScoreInputs())),
                 React.createElement(Dialog_1.DialogActions, null,
-                    React.createElement(Button_1.default, { onClick: this.onClose, color: "primary" }, "Cancel"),
-                    React.createElement(Button_1.default, { onClick: this.onClickAddScore, color: "primary", disabled: !this.isAllFilled() || loading },
+                    React.createElement(Button_1.default, { onClick: this.onClose, color: 'primary' }, "Cancel"),
+                    React.createElement(Button_1.default, { onClick: this.onClickAddScore, color: 'primary', disabled: !this.isAllFilled() || loading },
                         loading && React.createElement(Progress_1.CircularProgress, { size: 20, className: styles.progress }),
                         "Add")))));
     }
@@ -99189,7 +99194,7 @@ exports.filterByGameId = (gameId, data) => {
     const gameScores = _.pickBy(data.scores, { gameId });
     const gamePlayerIds = _.uniq(_.flatten(_.map(gameScores, (score) => [score.playerId1, score.playerId2])));
     const gamePlayers = _.pickBy(data.players, (player) => _.includes(gamePlayerIds, player.id));
-    return { players: gamePlayers, games: games, scores: gameScores };
+    return { players: gamePlayers, games, scores: gameScores };
 };
 
 

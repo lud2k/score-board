@@ -4,7 +4,7 @@ import Popover from 'material-ui/Popover'
 import Chip from 'material-ui/Chip'
 import * as d3 from 'd3'
 import {
-  Data, Id, Player, PlayersMap, Score
+  Data, Id, Player, PlayersMap, Score,
 } from '../../model/models'
 import {SimulationNodeDatum} from 'd3-force'
 import * as _ from 'lodash'

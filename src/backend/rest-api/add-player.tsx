@@ -44,9 +44,13 @@ export class AddPlayer extends React.Component<{data: Data, config: AppConfig},
         name: this.state.name,
       }),
       headers: new Headers({
-        'Content-Type': 'application/json'
-      })
-    }).then((response: any) => {
+        'Content-Type': 'application/json',
+      }),
+    }).then((response: Response) => {
+      if (response.status !== 200) {
+        throw new Error('Invalid response: ' + response.statusText)
+      }
+
       // parse and trigger redux action
       return response.json().then((player: Player) => {
         this.setState({ loading: false, open: false })
@@ -81,10 +85,10 @@ export class AddPlayer extends React.Component<{data: Data, config: AppConfig},
             <TextField label='Name' fullWidth value={name} onChange={this.onChangeName} />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.onClose} color="primary">
+            <Button onClick={this.onClose} color='primary'>
               Cancel
             </Button>
-            <Button onClick={this.onClickAddPlayer} color="primary"
+            <Button onClick={this.onClickAddPlayer} color='primary'
                     disabled={!this.isAllFilled() || loading}>
               {loading && <CircularProgress size={20} className={styles.progress} />}
               Add

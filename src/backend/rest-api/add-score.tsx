@@ -61,7 +61,7 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
     this.setState({
       open: true,
       scores: [{score1: '0', score2: '0'}],
-      date: moment().format('YYYY-MM-DD')
+      date: moment().format('YYYY-MM-DD'),
     })
   }
 
@@ -82,15 +82,19 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
           gameId: this.state.gameId,
           playerId1: this.state.playerId1,
           playerId2: this.state.playerId2,
-          score1: parseInt(score.score1),
-          score2: parseInt(score.score2)
+          score1: parseInt(score.score1, 10),
+          score2: parseInt(score.score2, 10),
         }),
         headers: new Headers({
-          'Content-Type': 'application/json'
-        })
+          'Content-Type': 'application/json',
+        }),
       }).then((response: any) => {
-        return response.json().then((score: Score) => {
-          store.dispatch(addScore(score))
+        if (response.status !== 200) {
+          throw new Error('Invalid response: ' + response.statusText)
+        }
+
+        return response.json().then((newScore: Score) => {
+          store.dispatch(addScore(newScore))
         })
       })
     })
@@ -109,7 +113,6 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
   }
 
   onChangeDate = (event: any) => {
-    console.log('event', event.currentTarget.value)
     const date = event.currentTarget.value+''
     this.setState({ date })
   }
@@ -165,7 +168,7 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
         <Dialog open={open} onClose={this.onClose} classes={{paper: styles.dialog}}>
           <DialogTitle>Add Score</DialogTitle>
           <DialogContent>
-            <TextField label="Date" type="date" value={date} onChange={this.onChangeDate}
+            <TextField label='Date' type='date' value={date} onChange={this.onChangeDate}
                        fullWidth className={styles.dateField} />
             <TextField select label='Game' fullWidth value={gameId} onChange={this.onChangeGame}>
               {_.sortBy(_.values(this.props.data.games), 'name').map((game: Game) => (
@@ -176,8 +179,8 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
             </TextField>
             <div>
               <div className={styles.group}>
-                <FormLabel component="legend">Player 1</FormLabel>
-                <FormLabel component="legend">Player 2</FormLabel>
+                <FormLabel component='legend'>Player 1</FormLabel>
+                <FormLabel component='legend'>Player 2</FormLabel>
               </div>
               <div className={styles.group}>
                 <PlayerSelectField players={this.props.data.players} value={playerId1}
@@ -189,10 +192,10 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.onClose} color="primary">
+            <Button onClick={this.onClose} color='primary'>
               Cancel
             </Button>
-            <Button onClick={this.onClickAddScore} color="primary"
+            <Button onClick={this.onClickAddScore} color='primary'
                     disabled={!this.isAllFilled() || loading}>
               {loading && <CircularProgress size={20} className={styles.progress} />}
               Add

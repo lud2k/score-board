@@ -25,21 +25,20 @@ export interface SetConfigAction extends Action {
 
 export const addPlayer = (player: Player): AddPlayerAction => ({
   type: ADD_PLAYER,
-  player
+  player,
 })
 
 export const addScore = (score: Score): AddScoreAction => ({
   type: ADD_SCORE,
-  score
+  score,
 })
 
 export const setData = (data: Data): SetDataAction => ({
   type: SET_DATA,
-  data
+  data,
 })
 
 export const setConfig = (config: AppConfig): SetConfigAction => ({
   type: SET_CONFIG,
-  config
+  config,
 })
-

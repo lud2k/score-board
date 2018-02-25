@@ -4,7 +4,7 @@ import {AppConfig} from '../config'
 import * as GoogleSheetsPublished from './google-sheets-published'
 import * as RestApi from './rest-api'
 import {Data, Player} from '../model/models'
-import * as randomColor from "randomcolor"
+import * as randomColor from 'randomcolor'
 import _ = require('lodash')
 
 export const getData = (config: AppConfig): Promise<Data> => {
@@ -18,7 +18,7 @@ export const getData = (config: AppConfig): Promise<Data> => {
     throw new Error(`Unsupported backend type: ${backendType}`)
   }
 
-  return promise.then(data => {
+  return promise.then((data: Data) => {
     // generate random colors for players
     const colors = randomColor({
       luminosity: 'dark',
