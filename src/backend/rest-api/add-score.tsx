@@ -79,7 +79,7 @@ export class AddScore extends React.Component<{data: Data, config: AppConfig}, {
         return score.score1 && score.score2 && !(score.score1 === '0' && score.score2 === '0')
       })
       .map((score) => {
-        return fetch(`${this.props.config.backend.url}/scoresx`, {
+        return fetch(`${this.props.config.backend.url}/scores`, {
           method: 'POST',
           body: JSON.stringify({
             date: this.state.date,

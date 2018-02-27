@@ -1,6 +1,6 @@
 {
   "name": "score-board-ui",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A dashboard showing game stats",
   "dependencies": {},
   "devDependencies": {
