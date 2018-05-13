@@ -1,16 +1,16 @@
 
 import * as React from 'react'
 import Table, { TableHead, TableRow, TableCell, TableBody } from 'material-ui/Table'
-import {Data, PlayerRanking, Stats} from '../../model/models'
+import {Data, GameStats, PlayerRanking} from '../../model/models'
 import * as _ from 'lodash'
 import {Link} from 'react-router-dom'
 
 const styles = require('./ranking.css')
 
-export class Ranking extends React.Component<{ data: Data, stats: Stats }, {}> {
+export class Ranking extends React.Component<{ data: Data, stats: GameStats }, {}> {
   render() {
     const {data, stats} = this.props
-    const rankings = _.sortBy(stats.rankings, 'rating').reverse()
+    const rankings = _.orderBy(stats.rankings, ['rating'], ['desc'])
     const minRating = rankings.length > 0 ? _.last(rankings).rating : 0
 
     return (
@@ -34,7 +34,7 @@ export class Ranking extends React.Component<{ data: Data, stats: Stats }, {}> {
                     {data.players[ranking.playerId].name}
                   </Link>
                 </TableCell>
-                <TableCell numeric>{(ranking.rating-minRating).toFixed(2)}</TableCell>
+                <TableCell numeric>{(ranking.rating).toFixed(2)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

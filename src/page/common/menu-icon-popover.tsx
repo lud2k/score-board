@@ -53,6 +53,18 @@ export class MenuIconPopover extends React.Component<{ data: Data },
     return items
   }
 
+  onClickHome() {
+    location.hash = `#/`
+  }
+
+  renderHomeMenuItems() {
+    return (
+      <ListItem button onClick={(event) => this.onClickHome()}>
+        <ListItemText primary='Home' secondary='General stats' />
+      </ListItem>
+    )
+  }
+
   render() {
     const {buttonElement} = this.state
 
@@ -76,6 +88,9 @@ export class MenuIconPopover extends React.Component<{ data: Data },
             horizontal: 'left',
           }}
         >
+          <List component='nav' subheader={<ListSubheader component='div'>Pages</ListSubheader>}>
+            {this.renderHomeMenuItems()}
+          </List>
           <List component='nav' subheader={<ListSubheader component='div'>Games</ListSubheader>}>
             {this.renderMenuItems()}
           </List>

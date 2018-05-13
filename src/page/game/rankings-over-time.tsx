@@ -3,7 +3,7 @@ import * as React from 'react'
 import Popover from 'material-ui/Popover'
 import Chip from 'material-ui/Chip'
 import * as d3 from 'd3'
-import {Data, Id, PlayerRanking, Stats} from '../../model/models'
+import {Data, GameStats, Id, PlayerRanking} from '../../model/models'
 import * as _ from 'lodash'
 
 const styles = require('./rankings-over-time.css')
@@ -19,7 +19,7 @@ interface Link {
   value: number
 }
 
-export class RankingsOverTime extends React.Component<{ data: Data, stats: Stats },
+export class RankingsOverTime extends React.Component<{ data: Data, stats: GameStats },
   { overElement: EventTarget, overNode: any }> {
 
   ele: SVGElement

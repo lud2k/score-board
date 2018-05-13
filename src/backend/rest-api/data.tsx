@@ -16,6 +16,7 @@ export const getData = (config: AppConfig): Promise<Data> => {
             players: _.keyBy(data.players, 'id'),
             games: _.keyBy(data.games, 'id'),
             scores: _.keyBy(data.scores, 'id'),
+            teams: _.keyBy(data.teams, 'id'),
           }
         })
       })

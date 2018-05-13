@@ -1,14 +1,14 @@
 
 import * as React from 'react'
-import {Data, Player, Stats} from '../../../model/models'
+import {Data, GameStats, Player} from '../../../model/models'
 import {Fact} from './fact'
 import StarIcon from 'material-ui-icons/Star'
 import * as _ from 'lodash'
 import * as moment from 'moment'
 import {Link} from 'react-router-dom'
 
-export class SecondPlayerFact extends React.Component<{ data: Data, stats: Stats }, {}> {
-  getNumberOfDays(bestPlayer: Player, stats: Stats): number {
+export class SecondPlayerFact extends React.Component<{ data: Data, stats: GameStats }, {}> {
+  getNumberOfDays(bestPlayer: Player, stats: GameStats): number {
     const dates = _.keys(stats.rankingsByDate).sort().reverse()
     let sinceDate = moment()
     for (let i=0; i<dates.length; i++) {
@@ -21,7 +21,7 @@ export class SecondPlayerFact extends React.Component<{ data: Data, stats: Stats
     return Math.floor(moment.duration(moment().diff(sinceDate)).asDays())
   }
 
-  renderSecondSentence(bestPlayer: Player, stats: Stats) {
+  renderSecondSentence(bestPlayer: Player, stats: GameStats) {
     const howManyDays = this.getNumberOfDays(bestPlayer, stats)
     if (howManyDays === 0) {
       return (
@@ -51,21 +51,21 @@ export class SecondPlayerFact extends React.Component<{ data: Data, stats: Stats
     )
   }
 
-  static getSecondPlayer(data: Data, stats: Stats): Player {
+  static getSecondPlayer(data: Data, stats: GameStats): Player {
     if (_.size(data.players) > 2) {
       const rankings = stats.rankings
       return data.players[rankings[rankings.length-2].playerId]
     }
   }
 
-  static getBestPlayer(data: Data, stats: Stats): Player {
+  static getBestPlayer(data: Data, stats: GameStats): Player {
     if (_.size(data.players) > 2) {
       const rankings = stats.rankings
       return data.players[rankings[rankings.length-1].playerId]
     }
   }
 
-  static canDisplay(data: Data, stats: Stats): boolean {
+  static canDisplay(data: Data, stats: GameStats): boolean {
     return !!this.getSecondPlayer(data, stats)
   }
 }

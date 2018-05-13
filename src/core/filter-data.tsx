@@ -8,5 +8,7 @@ export const filterByGameId = (gameId: Id, data: Data): Data => {
   const gamePlayerIds = _.uniq(_.flatten(_.map(gameScores,
     (score) => [score.playerId1, score.playerId2])))
   const gamePlayers = _.pickBy(data.players, (player) => _.includes(gamePlayerIds, player.id))
-  return {players: gamePlayers, games, scores: gameScores}
+  const gameTeamIds = _.uniq(_.map(gamePlayers, gamePlayer => gamePlayer.teamId))
+  const teams = _.pickBy(data.teams, (team) => _.includes(gameTeamIds, team.id))
+  return {players: gamePlayers, games, scores: gameScores, teams}
 }

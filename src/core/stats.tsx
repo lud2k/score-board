@@ -1,9 +1,9 @@
 
 import {Data, Stats} from '../model/models'
-import {computeRankings} from './ranking'
+import {computeGameRankings} from './ranking'
 
 export const computeStats = (data: Data): Stats => {
   return {
-    ...computeRankings(data),
+    games: computeGameRankings(data)
   }
 }

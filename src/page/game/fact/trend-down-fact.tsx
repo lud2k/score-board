@@ -1,12 +1,12 @@
 
 import * as React from 'react'
-import {Data, Player, Stats} from '../../../model/models'
+import {Data, GameStats, Player} from '../../../model/models'
 import {Fact} from './fact'
 import TrendingDownIcon from 'material-ui-icons/TrendingDown'
 import * as _ from 'lodash'
 import {Link} from 'react-router-dom'
 
-export class TrendDownFact extends React.Component<{ data: Data, stats: Stats }, {}> {
+export class TrendDownFact extends React.Component<{ data: Data, stats: GameStats }, {}> {
   render() {
     const {data, stats} = this.props
     const worstTrend = TrendDownFact.getWorstTrendDown(data, stats)
@@ -14,12 +14,12 @@ export class TrendDownFact extends React.Component<{ data: Data, stats: Stats },
       <Fact>
         <TrendingDownIcon />
         <Link to={`/player/${worstTrend.player.id}`}><b>{worstTrend.player.name}</b></Link> is
-        going down, loosing {Math.floor(-worstTrend.change)} points!
+        going down, losing {Math.floor(-worstTrend.change)} points!
       </Fact>
     )
   }
 
-  static getWorstTrendDown(data: Data, stats: Stats): {change: number, player: Player} {
+  static getWorstTrendDown(data: Data, stats: GameStats): {change: number, player: Player} {
     if (_.size(data.players) > 3 && _.size(stats.rankingsByDate) > 3) {
       const dates = _.keys(stats.rankingsByDate).sort().reverse()
       const lastRankings = _.sortBy(stats.rankingsByDate[dates[0]], 'playerId')
@@ -44,7 +44,7 @@ export class TrendDownFact extends React.Component<{ data: Data, stats: Stats },
     return null
   }
 
-  static canDisplay(data: Data, stats: Stats): boolean {
+  static canDisplay(data: Data, stats: GameStats): boolean {
     return !!this.getWorstTrendDown(data, stats)
   }
 }

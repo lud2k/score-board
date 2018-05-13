@@ -1,6 +1,6 @@
 
 import {AppConfig} from '../../config'
-import {Game, Data, Player, Score} from '../../model/models'
+import {Game, Data, Player, Score, Team} from '../../model/models'
 import * as _ from 'lodash'
 import moment = require('moment')
 
@@ -10,6 +10,7 @@ const PLAYERS = ['Cordie', 'Priscilla', 'Myrna', 'Margarette', 'Delmar', 'Lilian
   'Regine', 'Oma', 'Ashlee', 'Janette', 'Alvaro', 'Benito', 'Jenette', 'Flora', 'Scotty', 'Else',
   'Bryant', 'Treasa', 'Jacquiline']
 const GAMES =  ['Ping Pong', 'Billiard', 'Fuzzball', 'Cornhole']
+const TEAMS = ['Tango', 'Alpha', 'Delta']
 
 const generateRandomScores = (games: Game[], players: Player[]): Score[] => {
   // assign players to games
@@ -28,7 +29,8 @@ const generateRandomScores = (games: Game[], players: Player[]): Score[] => {
     const half = Math.round(playersInGame.length/2)
     players.forEach((player) => {
       playersFriends[game.id][player.id] =
-        _.sampleSize(playersInGame, _.random(2, half))
+        _.filter(_.sampleSize(playersInGame, _.random(2, half)),
+          (playerInGame) => playerInGame.id !== player.id)
     })
   })
 
@@ -67,8 +69,14 @@ const generateRandomData = (): Promise<Data> => {
     name
   }))
 
+  const teams = TEAMS.map((name: string, index: number): Team => ({
+    id: index.toString(),
+    name
+  }))
+
   const players = PLAYERS.map((name: string, index: number): Player => ({
     id: index.toString(),
+    teamId: teams[index%teams.length].id,
     name,
     color: null
   }))
@@ -78,7 +86,8 @@ const generateRandomData = (): Promise<Data> => {
   return Promise.resolve({
     players: _.keyBy(players, 'id'),
     games: _.keyBy(games, 'id'),
-    scores: _.keyBy(scores, 'id')
+    scores: _.keyBy(scores, 'id'),
+    teams: _.keyBy(teams, 'id')
   })
 }
 

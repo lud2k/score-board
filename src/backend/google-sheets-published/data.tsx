@@ -1,6 +1,6 @@
 
 import {AppConfig} from '../../config'
-import {Game, GamesMap, ScoresMap, PlayersMap, Data} from '../../model/models'
+import {Game, GamesMap, ScoresMap, PlayersMap, Data, TeamMap, Team} from '../../model/models'
 import * as PapaParse from 'papaparse'
 import * as _ from 'lodash'
 
@@ -18,15 +18,32 @@ interface CsvRow {
   'Score 2': string
 }
 
-const parsePlayers = (rows: CsvRow[]): PlayersMap => {
+const parsePlayers = (teams: TeamMap, rows: CsvRow[]): PlayersMap => {
+  const teamsByName = _.keyBy(_.values(teams), 'name')
+  const namesTeamMap = {}
+  rows.forEach((row) => {
+    if (row['Team Player'] && row['Team Name']) {
+      namesTeamMap[row['Team Player']] = teamsByName[row['Team Name']]
+    }
+  })
+
   const namesMap = {}
   rows.forEach((row) => {
     namesMap[row['Name 1']] = true
     namesMap[row['Name 2']] = true
+
+    // HACK: modifies the input, not great, creates a new "default" team.
+    if (!namesTeamMap[row['Name 1']] || !namesTeamMap[row['Name 2']]) {
+      teams['default'] = {
+        id: 'default',
+        name: 'Unknown Team'
+      }
+    }
   })
 
   const players = _.keys(namesMap).map((name, index) => ({
     color: null,
+    teamId: namesTeamMap[name] ? namesTeamMap[name].id : 'default',
     id: index.toString(),
     name,
   }))
@@ -58,6 +75,16 @@ const parseScores = (games: GamesMap, players: PlayersMap, rows: CsvRow[]): Scor
   return _.keyBy(scores, 'id')
 }
 
+const parseTeams = (rows: CsvRow[]): TeamMap => {
+  const teams: Set<string> = new Set()
+  rows.forEach((row) => {
+    if (row['Team Name'] && row['Team Player']) {
+      teams.add(row['Team Name'])
+    }
+  })
+  return _.keyBy(Array.from(teams).map((name, id) => ({id: id.toString(), name})), 'id')
+}
+
 export const getData = (config: AppConfig): Promise<Data> => {
   if (CACHE) {
     return CACHE
@@ -66,10 +93,11 @@ export const getData = (config: AppConfig): Promise<Data> => {
       .then((response) => {
         return response.text().then((csvText) => {
           const data = PapaParse.parse(csvText, {header: true}).data
-          const players = parsePlayers(data)
+          const teams = parseTeams(data)
+          const players = parsePlayers(teams, data)
           const games = parseGames(data)
           const scores = parseScores(games, players, data)
-          return {players, games, scores}
+          return {players, games, scores, teams}
         })
       })
   }

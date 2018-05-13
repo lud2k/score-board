@@ -8,12 +8,13 @@ import TextField from 'material-ui/TextField'
 import Dialog, {DialogActions, DialogContent, DialogTitle} from 'material-ui/Dialog'
 import {store} from '../../redux/store'
 import {addPlayer} from '../../redux/actions'
-import {Player, Data} from '../../model/models'
+import {Player, Data, Id} from '../../model/models'
+import {TeamSelectField} from '../../page/common/team-select-field'
 
 const styles = require('./add-player.css')
 
 export class AddPlayer extends React.Component<{data: Data, config: AppConfig},
-  {open: boolean, loading: boolean, name: string}> {
+  {open: boolean, loading: boolean, name: string, teamId: string}> {
 
   constructor(props: any) {
     super(props)
@@ -21,12 +22,13 @@ export class AddPlayer extends React.Component<{data: Data, config: AppConfig},
     this.state = {
       open: false,
       loading: false,
+      teamId: '',
       name: '',
     }
   }
 
   isAllFilled(): boolean {
-    return this.state.name !== ''
+    return this.state.name !== '' && this.state.teamId !== ''
   }
 
   onClose = () => {
@@ -42,6 +44,7 @@ export class AddPlayer extends React.Component<{data: Data, config: AppConfig},
       method: 'POST',
       body: JSON.stringify({
         name: this.state.name,
+        teamId: this.state.teamId,
       }),
       headers: new Headers({
         'Content-Type': 'application/json',
@@ -71,6 +74,10 @@ export class AddPlayer extends React.Component<{data: Data, config: AppConfig},
     this.setState({ open: true, name: '' })
   }
 
+  onChangeTeam =(teamId: Id) => {
+    this.setState({ teamId } as any)
+  }
+
   render() {
     const {open, name, loading} = this.state
     return (
@@ -83,6 +90,9 @@ export class AddPlayer extends React.Component<{data: Data, config: AppConfig},
           <DialogTitle>Add Player</DialogTitle>
           <DialogContent>
             <TextField label='Name' fullWidth value={name} onChange={this.onChangeName} />
+            <div className={styles.spacing} />
+            <TeamSelectField teams={this.props.data.teams} label='Team' value={this.state.teamId}
+                             onChange={this.onChangeTeam} />
           </DialogContent>
           <DialogActions>
             <Button onClick={this.onClose} color='primary'>

@@ -7,7 +7,7 @@ import Toolbar from 'material-ui/Toolbar'
 import Grid from 'material-ui/Grid'
 import {PlayerGraph} from './player-graph'
 import {Ranking} from './ranking'
-import {Data, Id} from '../../model/models'
+import {Data, Id, Stats} from '../../model/models'
 import {RankingsOverTime} from './rankings-over-time'
 import {Calendar} from './calendar'
 import {Facts} from './facts'
@@ -20,15 +20,17 @@ import {AppConfig} from '../../config'
 import {MenuIconPopover} from '../common/menu-icon-popover'
 import {Title} from '../common/title'
 import {filterByGameId} from '../../core/filter-data'
-import {computeStats} from '../../core/stats'
+import {TeamRankings} from './team-ranking'
 
 const styles = require('./game.css')
 
-export class Game extends React.Component<{ data: Data, config: AppConfig, gameId: Id }, {}> {
+export class Game extends React.Component<{ data: Data, stats: Stats, config:
+    AppConfig, gameId: Id }, {}> {
+
   render() {
-    const {data, gameId, config} = this.props
+    const {data, gameId, stats, config} = this.props
     const gameData = filterByGameId(gameId, data)
-    const gameStats = computeStats(gameData)
+    const gameStats = stats.games[gameId]
     return (
       <div>
         <AppBar position='static'>
@@ -46,7 +48,7 @@ export class Game extends React.Component<{ data: Data, config: AppConfig, gameI
                 <Typography type='title' color='inherit' style={{ padding: '20px' }}>
                   <EventIcon className={styles.titleIcon} /> Activity
                 </Typography>
-                <Calendar data={gameData} stats={gameStats} />
+                <Calendar data={gameData} />
               </Paper>
             </Grid>
             <Grid item xs={12} sm={6}>

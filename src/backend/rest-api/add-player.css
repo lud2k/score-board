@@ -6,3 +6,7 @@
 :local(.progress) {
     margin-right: 10px;
 }
+
+:local(.spacing) {
+    height: 14px;
+}

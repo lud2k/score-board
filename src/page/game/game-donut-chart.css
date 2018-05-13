@@ -1,0 +1,9 @@
+
+:local(.game-donut-chart) {
+    padding: 44px;
+    text-align: center;
+}
+
+:local(.game-donut-chart) > svg {
+    max-width: 100%;
+}

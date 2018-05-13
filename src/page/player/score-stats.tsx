@@ -76,7 +76,7 @@ export class ScoreStats extends React.Component<{ data: Data, playerId: Id }, {}
         return res
       }, {})
     const scoresPerPlayerList = _.sortBy(_.map(scoresPerPlayer, (scores: Score[], otherPlayerId: Id) => ({
-      scores: _.sortBy(scores, 'date').reverse(),
+      scores: _.orderBy(scores, ['date'], ['desc']),
       playerId: otherPlayerId,
     })), (item) => -item.scores.length)
 

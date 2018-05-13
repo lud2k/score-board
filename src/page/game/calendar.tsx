@@ -1,6 +1,6 @@
 
 import * as React from 'react'
-import {Data, Score, Stats} from '../../model/models'
+import {Data, Score} from '../../model/models'
 import * as _ from 'lodash'
 import * as moment from 'moment'
 import { Moment } from 'moment'
@@ -8,7 +8,7 @@ import Popover from 'material-ui/Popover'
 
 const styles = require('./calendar.css')
 
-export class Calendar extends React.Component<{ data: Data, stats: Stats },
+export class Calendar extends React.Component<{ data: Data },
     { overElement: EventTarget, overScores: Score[] }> {
 
   constructor(props: any) {
@@ -122,7 +122,7 @@ export class Calendar extends React.Component<{ data: Data, stats: Stats },
   }
 
   render() {
-    const {data, stats} = this.props
+    const {data} = this.props
     const datesArray = this.getDates()
 
     return (

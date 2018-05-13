@@ -4,10 +4,12 @@ import {
 } from './actions'
 import {createStore, Store} from 'redux'
 import {AppConfig} from '../config'
-import {Data} from '../model/models'
+import {Data, Stats} from '../model/models'
+import {computeStats} from '../core/stats'
 
 export interface StoreState {
   data?: Data
+  stats?: Stats
   config?: AppConfig
 }
 
@@ -25,30 +27,35 @@ export const reducer = (state: StoreState = {}, action: AddPlayerAction & AddSco
       return {
         ...state,
         data: action.data,
+        stats: computeStats(action.data),
       }
     }
     case ADD_PLAYER: {
+      const data = {
+        ...state.data,
+        players: {
+          ...state.data.players,
+          [action.player.id]: action.player,
+        },
+      }
       return {
         ...state,
-        data: {
-          ...state.data,
-          players: {
-            ...state.data.players,
-            [action.player.id]: action.player,
-          },
-        },
+        data,
+        stats: computeStats(data),
       }
     }
     case ADD_SCORE: {
+      const data = {
+        ...state.data,
+        scores: {
+          ...state.data.scores,
+          [action.score.id]: action.score,
+        },
+      }
       return {
         ...state,
-        data: {
-          ...state.data,
-          scores: {
-            ...state.data.scores,
-            [action.score.id]: action.score,
-          },
-        },
+        data,
+        stats: computeStats(data),
       }
     }
     default:

@@ -7,11 +7,12 @@ import {HashRouter} from 'react-router-dom'
 import {Routes} from './routes'
 import {store} from './redux/store'
 import {setConfig, setData} from './redux/actions'
-import {Data} from './model/models'
+import {Data, Stats} from './model/models'
 
 const styles = require('./app.css')
 
-export class App extends React.Component<{}, { data?: Data, error?: any, config?: AppConfig }> {
+export class App extends React.Component<{}, { data?: Data, stats?: Stats, error?: any,
+  config?: AppConfig }> {
 
   constructor(props: any) {
     super(props)
@@ -35,12 +36,12 @@ export class App extends React.Component<{}, { data?: Data, error?: any, config?
     // Update the state when the store is changed
     store.subscribe(() => {
       const state = store.getState()
-      this.setState({ data: state.data, config: state.config })
+      this.setState({ data: state.data, stats: state.stats, config: state.config })
     })
   }
 
   renderContent() {
-    const {data, config, error} = this.state
+    const {data, stats, config, error} = this.state
     if (error) {
       return (
         <div className='error'>
@@ -75,7 +76,7 @@ export class App extends React.Component<{}, { data?: Data, error?: any, config?
 
     return (
         <div className='root'>
-          <Routes data={data} config={this.state.config} />
+          <Routes data={data} stats={stats} config={config} />
         </div>
       )
   }

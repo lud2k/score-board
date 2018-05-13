@@ -5,9 +5,15 @@ export interface Data {
   players: PlayersMap
   scores: ScoresMap
   games: GamesMap
+  teams: TeamMap
 }
 
 export interface Game {
+  id: Id
+  name: string
+}
+
+export interface Team {
   id: Id
   name: string
 }
@@ -24,6 +30,7 @@ export interface Score {
 
 export interface Player {
   id: Id
+  teamId: Id
   name: string
   color: string
   avatar?: string
@@ -32,6 +39,7 @@ export interface Player {
 export interface PlayersMap {[id: string]: Player}
 export interface GamesMap {[id: string]: Game}
 export interface ScoresMap {[id: string]: Score}
+export interface TeamMap {[id: string]: Team}
 
 export interface PlayerRanking {
   date: string
@@ -43,9 +51,23 @@ export interface PlayerRanking {
   normalizedRating: number
 }
 
+export interface TeamRanking {
+  rating: number
+  deviation: number
+  volatility: number
+  teamId: Id
+}
+
 export interface PlayerRankingsByDate {[date: string]: PlayerRanking[]}
 
-export interface Stats {
+export interface GameStats {
   rankingsByDate: PlayerRankingsByDate
   rankings: PlayerRanking[]
+}
+export interface GamesStats {
+  [id: string]: GameStats
+}
+
+export interface Stats {
+  games: GamesStats
 }

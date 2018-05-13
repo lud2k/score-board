@@ -1,0 +1,15 @@
+
+:local(.ranking) {
+    max-height: 394px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+:local(.ranking) table tbody td {
+    font-size: 1rem;
+}
+
+:local(.title-icon) {
+    margin-right: 2px;
+    vertical-align: text-bottom;
+}
