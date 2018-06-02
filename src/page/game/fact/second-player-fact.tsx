@@ -54,14 +54,14 @@ export class SecondPlayerFact extends React.Component<{ data: Data, stats: GameS
   static getSecondPlayer(data: Data, stats: GameStats): Player {
     if (_.size(data.players) > 2) {
       const rankings = stats.rankings
-      return data.players[rankings[rankings.length-2].playerId]
+      return data.players[rankings[1].playerId]
     }
   }
 
   static getBestPlayer(data: Data, stats: GameStats): Player {
     if (_.size(data.players) > 2) {
       const rankings = stats.rankings
-      return data.players[rankings[rankings.length-1].playerId]
+      return data.players[rankings[0].playerId]
     }
   }
 

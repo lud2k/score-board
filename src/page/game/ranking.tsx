@@ -34,7 +34,7 @@ export class Ranking extends React.Component<{ data: Data, stats: GameStats }, {
                     {data.players[ranking.playerId].name}
                   </Link>
                 </TableCell>
-                <TableCell numeric>{(ranking.rating).toFixed(2)}</TableCell>
+                <TableCell numeric>{(ranking.rating-minRating).toFixed(2)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

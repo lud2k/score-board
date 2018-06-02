@@ -88,7 +88,7 @@ export class BestPlayers extends React.Component<{ data: Data, stats: Stats,
   }
 
   getColumns(): TableColumn[] {
-    const {teams} = this.props.data.teams
+    const {teams} = this.props.data
     const ret = [
       {key: 'player', label: 'Player', numeric: false},
       {key: 'badgesValue', label: 'Badges', numeric: false},

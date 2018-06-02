@@ -54,7 +54,7 @@ export class BestPlayerFact extends React.Component<{ data: Data, stats: GameSta
   static getBestPlayer(data: Data, stats: GameStats): Player {
     if (_.size(data.players) > 2) {
       const rankings = stats.rankings
-      return data.players[rankings[rankings.length-1].playerId]
+      return data.players[rankings[0].playerId]
     }
   }
 

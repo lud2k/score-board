@@ -35864,6 +35864,120 @@ const RestApi = __webpack_require__(632);
 const Random = __webpack_require__(718);
 const randomColor = __webpack_require__(720);
 const _ = __webpack_require__(16);
+const generateColorsForPlayers = (data) => {
+    // generate random colors for players
+    const colors = randomColor({
+        luminosity: 'dark',
+        count: _.size(data.players),
+        seed: 15158731,
+    });
+    let index = 0;
+    _.forEach(data.players, (player) => {
+        if (!player.color) {
+            player.color = colors[index++];
+        }
+    });
+    return data;
+};
+const validateTeams = (data) => {
+    _.forEach(data.teams, (team, id) => {
+        if (!team) {
+            console.error('Invalid team', id);
+            delete data.teams[id];
+            return;
+        }
+        if (!team.id) {
+            console.error('Invalid team id. Dropping team.', team);
+            delete data.teams[id];
+        }
+        if (!team.name || !team.name.trim()) {
+            console.error('Invalid team name. Setting a default.', team);
+            team.name = 'Missing Team Name';
+        }
+    });
+};
+const validateGames = (data) => {
+    _.forEach(data.games, (game, id) => {
+        if (!game) {
+            console.error('Invalid game', id);
+            delete data.games[id];
+            return;
+        }
+        if (!game.id) {
+            console.error('Invalid game id. Dropping game.', game);
+            delete data.games[id];
+        }
+        if (!game.name || !game.name.trim()) {
+            console.error('Invalid game name. Setting a default.', game);
+            game.name = 'Missing Game Name';
+        }
+    });
+};
+const validatePlayers = (data) => {
+    _.forEach(data.players, (player, id) => {
+        if (!player) {
+            console.error('Invalid player', id);
+            delete data.players[id];
+            return;
+        }
+        if (!player.id) {
+            console.error('Invalid player id. Dropping player.', player);
+            delete data.players[id];
+        }
+        if (!player.name || !player.name.trim()) {
+            console.error('Invalid player name. Setting a default.', player);
+            player.name = 'Missing Player Name';
+        }
+        if (player.teamId && !data.teams[player.teamId]) {
+            console.error('Invalid team set on player. Dropping player.', player);
+            delete data.players[id];
+        }
+    });
+};
+const validateScores = (data) => {
+    _.forEach(data.scores, (score, id) => {
+        if (!score) {
+            console.error('Invalid score', id);
+            delete data.scores[id];
+            return;
+        }
+        if (!score.id) {
+            console.error('Invalid score id', score);
+            delete data.scores[id];
+        }
+        if (!score.date || !score.date.match('^\\d{4}-\\d{2}-\\d{2}$')) {
+            console.error('Invalid score date. Dropping score.', score);
+            delete data.scores[id];
+        }
+        if (!_.isNumber(score.score1)) {
+            console.error('Invalid score score1. Dropping score.', score);
+            delete data.scores[id];
+        }
+        if (!_.isNumber(score.score2)) {
+            console.error('Invalid score score2. Dropping score.', score);
+            delete data.scores[id];
+        }
+        if (!data.games[score.gameId]) {
+            console.error('Invalid score gameId. Dropping score.', score);
+            delete data.scores[id];
+        }
+        if (!data.players[score.playerId1]) {
+            console.error('Invalid score playerId1. Dropping score.', score);
+            delete data.scores[id];
+        }
+        if (!data.players[score.playerId2]) {
+            console.error('Invalid score playerId2. Dropping score.', score);
+            delete data.scores[id];
+        }
+    });
+};
+const validateData = (data) => {
+    validateTeams(data);
+    validateGames(data);
+    validatePlayers(data);
+    validateScores(data);
+    return data;
+};
 exports.getData = (config) => {
     const backendType = config.backend.type;
     let promise;
@@ -35879,21 +35993,9 @@ exports.getData = (config) => {
     else {
         throw new Error(`Unsupported backend type: ${backendType}`);
     }
-    return promise.then((data) => {
-        // generate random colors for players
-        const colors = randomColor({
-            luminosity: 'dark',
-            count: _.size(data.players),
-            seed: 15158731,
-        });
-        let index = 0;
-        _.forEach(data.players, (player) => {
-            if (!player.color) {
-                player.color = colors[index++];
-            }
-        });
-        return data;
-    });
+    return promise
+        .then((data) => validateData(data))
+        .then((data) => generateColorsForPlayers(data));
 };
 class AddEntry extends React.Component {
     render() {
@@ -99154,7 +99256,7 @@ class Ranking extends React.Component {
                     React.createElement(Table_1.TableCell, { style: { paddingRight: 24, textAlign: 'center' }, numeric: true }, index + 1),
                     React.createElement(Table_1.TableCell, null,
                         React.createElement(react_router_dom_1.Link, { to: `/player/${ranking.playerId}` }, data.players[ranking.playerId].name)),
-                    React.createElement(Table_1.TableCell, { numeric: true }, (ranking.rating).toFixed(2)))))))));
+                    React.createElement(Table_1.TableCell, { numeric: true }, (ranking.rating - minRating).toFixed(2)))))))));
     }
 }
 exports.Ranking = Ranking;
@@ -99605,7 +99707,7 @@ class BestPlayerFact extends React.Component {
     static getBestPlayer(data, stats) {
         if (_.size(data.players) > 2) {
             const rankings = stats.rankings;
-            return data.players[rankings[rankings.length - 1].playerId];
+            return data.players[rankings[0].playerId];
         }
     }
     static canDisplay(data, stats) {
@@ -99716,13 +99818,13 @@ class SecondPlayerFact extends React.Component {
     static getSecondPlayer(data, stats) {
         if (_.size(data.players) > 2) {
             const rankings = stats.rankings;
-            return data.players[rankings[rankings.length - 2].playerId];
+            return data.players[rankings[1].playerId];
         }
     }
     static getBestPlayer(data, stats) {
         if (_.size(data.players) > 2) {
             const rankings = stats.rankings;
-            return data.players[rankings[rankings.length - 1].playerId];
+            return data.players[rankings[0].playerId];
         }
     }
     static canDisplay(data, stats) {
@@ -100486,7 +100588,7 @@ class BestPlayers extends React.Component {
         return row[column.key];
     }
     getColumns() {
-        const { teams } = this.props.data.teams;
+        const { teams } = this.props.data;
         const ret = [
             { key: 'player', label: 'Player', numeric: false },
             { key: 'badgesValue', label: 'Badges', numeric: false },
