@@ -189,7 +189,7 @@ export class PlayerGraph extends React.Component<{ data: Data, stats: GameStats 
     const player = this.state.overNode && this.props.data.players[this.state.overNode.id]
     return (
       <div>
-        <svg width='100%' height='390px' ref={(ele) => this.ele = ele} />
+        <svg width='100%' height='438px' ref={(ele) => this.ele = ele} />
         <Popover
           title='Name here'
           className={styles.tooltip}

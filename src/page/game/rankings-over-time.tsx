@@ -40,11 +40,11 @@ export class RankingsOverTime extends React.Component<{ data: Data, stats: GameS
     const margin = {top: 10, right: 40, bottom: 75, left: 40}
     const width = this.ele.clientWidth - margin.left - margin.right // Use the window's width
     const height = 350
+    const {data: {players}, stats} = this.props
 
-    const players = this.props.data.players
-    const rankingsByDate = this.props.stats.rankingsByDate
-    const dates = _.keys(rankingsByDate).sort()
-    const playersIds = rankingsByDate[dates[0]].map((ranking) => ranking.playerId)
+    const rankings = _.mapValues(stats.rankingsByDate, (rankings) => _.keyBy(rankings, 'playerId'))
+    const dates = _.keys(rankings).sort().slice(-50)
+    const playersIds = _.keys(rankings[dates[0]])
 
     const xScale = d3.scaleLinear()
       .domain([0, dates.length-1])
@@ -78,17 +78,21 @@ export class RankingsOverTime extends React.Component<{ data: Data, stats: GameS
       .call(d3.axisLeft(yScale).ticks(0))
 
     playersIds.forEach((playerId: Id) => {
-      const rankings = dates.map((date) => _.find(rankingsByDate[date], {playerId}))
+      const playerRankings = dates.map((date) => rankings[date][playerId])
 
       svg.append('path')
-        .datum(rankings)
-        .attr('stroke', (d: any) => players[playerId].color)
+        .datum(playerRankings)
+        .attr('stroke', '#ccc')
         .attr('stroke-width', 2)
         .attr('fill', 'none')
         .attr('d', line)
+    })
+
+    playersIds.forEach((playerId: Id) => {
+      const playerRankings = dates.map((date) => rankings[date][playerId])
 
       svg.selectAll('.dot')
-        .data(rankings)
+        .data(playerRankings)
         .enter()
         .append('circle')
         .attr('fill', (d: any) => players[playerId].color)
@@ -96,7 +100,14 @@ export class RankingsOverTime extends React.Component<{ data: Data, stats: GameS
         .attr('cy', (d) => yScale(d.normalizedRating))
         .on('mouseover', this.onMouseOver.bind(this))
         .on('mouseout', this.onMouseOut.bind(this))
-        .attr('r', 3)
+        .attr('r', (d: PlayerRanking, i: number) => {
+          if ((i > 0 && playerRankings[i].normalizedRating !== playerRankings[i-1].normalizedRating) ||
+            (i < playerRankings.length-1 && playerRankings[i].normalizedRating !== playerRankings[i+1].normalizedRating)) {
+            return 3
+          } else {
+            return 0
+          }
+        })
     })
   }
 

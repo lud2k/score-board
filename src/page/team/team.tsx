@@ -1,19 +1,21 @@
 
 import * as React from 'react'
-import Paper from 'material-ui/Paper'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import Grid from 'material-ui/Grid'
-import {Data, Id} from '../../model/models'
+import {Data, Id, Stats} from '../../model/models'
 import {MenuIconPopover} from '../common/menu-icon-popover'
 import {AppConfig} from '../../config'
 import {Title} from '../common/title'
+import {Players} from './players'
 
 const styles = require('./team.css')
 
-export class Team extends React.Component<{ data: Data, config: AppConfig, teamId: Id }, {}> {
+export class Team extends React.Component<{ data: Data, stats: Stats, config: AppConfig,
+  teamId: Id }, {}> {
+
   render() {
-    const {data, config, teamId} = this.props
+    const {data, stats, config, teamId} = this.props
     return (
       <div>
         <AppBar position='static'>
@@ -24,11 +26,7 @@ export class Team extends React.Component<{ data: Data, config: AppConfig, teamI
         </AppBar>
         <div className={styles.content}>
           <Grid container spacing={24}>
-            <Grid item xs={12} sm={12}>
-              <Paper>
-                No content yet. Maybe one day!
-              </Paper>
-            </Grid>
+            <Players data={data} stats={stats} teamId={teamId} config={config}/>
           </Grid>
         </div>
       </div>

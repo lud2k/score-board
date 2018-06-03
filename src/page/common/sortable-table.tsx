@@ -77,7 +77,7 @@ export class SortableTableRow extends React.Component<{ entry: TableEntry, colum
 
 export class SortableTable extends React.Component<{ defaultOrderBy: OrderBy, data: TableData,
   columns: TableColumn[], rowRenderer: (entry: TableEntry, column: TableColumn) => any,
-  className: string },
+  className: string, rowsPerPage?: number },
   { orderBy: OrderBy, page: number }> {
 
   constructor(props: any) {
@@ -100,7 +100,7 @@ export class SortableTable extends React.Component<{ defaultOrderBy: OrderBy, da
   render() {
     const {data, columns, rowRenderer, className} = this.props
     const {orderBy, page} = this.state
-    const rowsPerPage = 8
+    const rowsPerPage = this.props.rowsPerPage || 8
     const rows = _.orderBy(data, [orderBy[1]], [orderBy[0] ? 'desc' : 'asc'])
       .slice(page*rowsPerPage, page*rowsPerPage+rowsPerPage)
     return (

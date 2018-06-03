@@ -1,0 +1,21 @@
+
+:local(.badge-icon)[data-value='1'] {
+    color: #ffd700;
+}
+
+:local(.badge-icon)[data-value='2'] {
+    color: #c0c0c0;
+}
+
+:local(.badge-icon)[data-value='3'] {
+    color: #8c7853;
+}
+
+:local(.title-icon) {
+    margin-right: 2px;
+    vertical-align: text-bottom;
+}
+
+:local(.table) tbody td {
+    font-size: 16px;
+}

@@ -30,7 +30,7 @@ export class Routes extends React.Component<{ data: Data, stats: Stats, config: 
           <Route path='/team/:teamId' render={({ match }) => {
             const team = data.teams[match.params.teamId]
             if (team) {
-              return <Team data={data} config={config} teamId={team.id} />
+              return <Team data={data} config={config} stats={stats} teamId={team.id} />
             } else {
               return <NotFound data={data} config={config} />
             }
